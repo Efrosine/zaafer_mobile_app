@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "536261010133",
+    "project_id": "zaafer-mobile",
+    "storage_bucket": "zaafer-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536261010133:android:3ef6894695c2794460785c",
+        "android_client_info": {
+          "package_name": "com.example.zaafer_mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHGcX8VeSr6FTRRORuJSngA3gEZnyD0es"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
