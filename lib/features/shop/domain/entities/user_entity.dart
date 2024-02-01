@@ -15,6 +15,15 @@ class UserEntity extends Equatable {
   final String? phoneNumber;
   final String? username;
 
+  factory UserEntity.empty() {
+    return const UserEntity(
+      name: null,
+      username: null,
+      phoneNumber: null,
+      gender: null,
+      birthday: null,
+    );
+  }
   List<String?> toList() {
     return [name, username, phoneNumber, gender, birthday];
   }

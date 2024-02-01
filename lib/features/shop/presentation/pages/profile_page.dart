@@ -28,7 +28,7 @@ class ProfilePage extends StatelessWidget {
 
     var listData = data.toList();
 
-    final _formKey = GlobalKey<FormState>();
+    final globalKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -106,7 +106,7 @@ class ProfilePage extends StatelessWidget {
             ),
             const Gap(12),
             Form(
-              key: _formKey,
+              key: globalKey,
               child: Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 columnWidths: <int, TableColumnWidth>{

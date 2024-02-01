@@ -1,14 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zaafer_mobile_app/config/custom_theme/app_theme.dart';
-import 'package:zaafer_mobile_app/features/shop/presentation/pages/profile_page.dart';
+import 'package:zaafer_mobile_app/config/routes/routes.dart';
+import 'package:zaafer_mobile_app/features/auth/presentation/bloc/auth_bloc.dart';
 
-import 'features/shop/presentation/pages/detail_transaction_page.dart';
+import 'package:zaafer_mobile_app/injection_container.dart';
+
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await initDepedencies();
   runApp(const Coba());
 }
 
@@ -17,15 +21,19 @@ class Coba extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      themeMode: ThemeMode.light,
-      theme: CAppTheme.lighTheme,
-      darkTheme: CAppTheme.darkTheme,
-      builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
-        child: child!,
+    return BlocProvider<AuthBloc>(
+      create: (context) => sl()..add(AuthCheckEvent()),
+      child: MaterialApp(
+        themeMode: ThemeMode.light,
+        theme: CAppTheme.lighTheme,
+        darkTheme: CAppTheme.darkTheme,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+          child: child!,
+        ),
+        onGenerateRoute: AppRoutes.onGenerateRoute,
+        initialRoute: '/',
       ),
-      home: const SafeArea(child: ProfilePage()),
     );
   }
 }
