@@ -15,6 +15,42 @@ import 'package:flutter/foundation.dart'
 /// );
 /// ```
 class DefaultFirebaseOptions {
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyAHGcX8VeSr6FTRRORuJSngA3gEZnyD0es',
+    appId: '1:536261010133:android:3ef6894695c2794460785c',
+    messagingSenderId: '536261010133',
+    projectId: 'zaafer-mobile',
+    storageBucket: 'zaafer-mobile.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyByOo8A5g5jtkKcQLbvg39ccArbiXKSq2E',
+    appId: '1:536261010133:ios:a77338e675fc3cec60785c',
+    messagingSenderId: '536261010133',
+    projectId: 'zaafer-mobile',
+    storageBucket: 'zaafer-mobile.appspot.com',
+    iosBundleId: 'com.example.zaaferMobileApp',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyByOo8A5g5jtkKcQLbvg39ccArbiXKSq2E',
+    appId: '1:536261010133:ios:562c3ab0420b8fb360785c',
+    messagingSenderId: '536261010133',
+    projectId: 'zaafer-mobile',
+    storageBucket: 'zaafer-mobile.appspot.com',
+    iosBundleId: 'com.example.zaaferMobileApp.RunnerTests',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyC68ZaKswoRLWmJkkhIABZOBNNqW0ZP0og',
+    appId: '1:536261010133:web:008e107c49c8d45f60785c',
+    messagingSenderId: '536261010133',
+    projectId: 'zaafer-mobile',
+    authDomain: 'zaafer-mobile.firebaseapp.com',
+    storageBucket: 'zaafer-mobile.appspot.com',
+    measurementId: 'G-8ZQT1YS8P8',
+  );
+
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       return web;
@@ -42,40 +78,4 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC68ZaKswoRLWmJkkhIABZOBNNqW0ZP0og',
-    appId: '1:536261010133:web:008e107c49c8d45f60785c',
-    messagingSenderId: '536261010133',
-    projectId: 'zaafer-mobile',
-    authDomain: 'zaafer-mobile.firebaseapp.com',
-    storageBucket: 'zaafer-mobile.appspot.com',
-    measurementId: 'G-8ZQT1YS8P8',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAHGcX8VeSr6FTRRORuJSngA3gEZnyD0es',
-    appId: '1:536261010133:android:3ef6894695c2794460785c',
-    messagingSenderId: '536261010133',
-    projectId: 'zaafer-mobile',
-    storageBucket: 'zaafer-mobile.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyByOo8A5g5jtkKcQLbvg39ccArbiXKSq2E',
-    appId: '1:536261010133:ios:a77338e675fc3cec60785c',
-    messagingSenderId: '536261010133',
-    projectId: 'zaafer-mobile',
-    storageBucket: 'zaafer-mobile.appspot.com',
-    iosBundleId: 'com.example.zaaferMobileApp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyByOo8A5g5jtkKcQLbvg39ccArbiXKSq2E',
-    appId: '1:536261010133:ios:562c3ab0420b8fb360785c',
-    messagingSenderId: '536261010133',
-    projectId: 'zaafer-mobile',
-    storageBucket: 'zaafer-mobile.appspot.com',
-    iosBundleId: 'com.example.zaaferMobileApp.RunnerTests',
-  );
 }

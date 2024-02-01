@@ -7,9 +7,11 @@ class CustomAppBarStyle extends ThemeExtension<CustomAppBarStyle> {
     this.titleTextStyle,
     this.titlePosition,
   });
+
   final TextStyle? subtitleTextStyle;
   final TitlePosition? titlePosition;
   final TextStyle? titleTextStyle;
+
   @override
   CustomAppBarStyle copyWith({
     TextStyle? subtitleTextStyle,

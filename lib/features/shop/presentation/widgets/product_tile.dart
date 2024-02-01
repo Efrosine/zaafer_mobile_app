@@ -5,10 +5,10 @@ class ProductTile extends StatelessWidget {
   const ProductTile(
       {super.key, required this.title, required this.subtitle, this.width, this.child});
 
+  final Widget? child;
   final String subtitle;
   final String title;
   final double? width;
-  final Widget? child;
 
   @override
   Widget build(BuildContext context) {

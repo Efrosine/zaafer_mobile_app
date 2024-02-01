@@ -9,12 +9,6 @@ class UserEntity extends Equatable {
     required this.birthday,
   });
 
-  final String? birthday;
-  final String? gender;
-  final String? name;
-  final String? phoneNumber;
-  final String? username;
-
   factory UserEntity.empty() {
     return const UserEntity(
       name: null,
@@ -23,9 +17,6 @@ class UserEntity extends Equatable {
       gender: null,
       birthday: null,
     );
-  }
-  List<String?> toList() {
-    return [name, username, phoneNumber, gender, birthday];
   }
 
   factory UserEntity.fromList(List<String?> data) {
@@ -38,6 +29,12 @@ class UserEntity extends Equatable {
     );
   }
 
+  final String? birthday;
+  final String? gender;
+  final String? name;
+  final String? phoneNumber;
+  final String? username;
+
   @override
   List<Object?> get props => [
         name,
@@ -46,4 +43,8 @@ class UserEntity extends Equatable {
         gender,
         birthday,
       ];
+
+  List<String?> toList() {
+    return [name, username, phoneNumber, gender, birthday];
+  }
 }

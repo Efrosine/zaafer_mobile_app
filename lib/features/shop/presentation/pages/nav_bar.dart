@@ -12,25 +12,6 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  int _currentIndex = 3;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        destinations: listLabel,
-        indicatorColor: Colors.transparent,
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-      ),
-      body: const [HomePage(), WishlistPage(), ChartPage(), ProfilePage()][_currentIndex],
-    );
-  }
-
   List<NavigationDestination> listLabel = const [
     NavigationDestination(
       icon: Icon(Icons.home),
@@ -49,4 +30,23 @@ class _NavBarState extends State<NavBar> {
       label: 'Profile',
     ),
   ];
+
+  int _currentIndex = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: NavigationBar(
+        destinations: listLabel,
+        indicatorColor: Colors.transparent,
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+      ),
+      body: const [HomePage(), WishlistPage(), ChartPage(), ProfilePage()][_currentIndex],
+    );
+  }
 }

@@ -12,9 +12,9 @@ class UserDataentryWidget extends StatelessWidget {
     this.onSaved,
   });
 
-  final bool isEditing;
-  final UserEntity? data;
   final Function()? onSaved;
+  final UserEntity? data;
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
