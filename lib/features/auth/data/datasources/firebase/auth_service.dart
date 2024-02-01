@@ -3,10 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zaafer_mobile_app/features/auth/data/models/auth_model.dart';
 
 class AuthService {
+  AuthService(this._auth, this._pref);
+
   final FirebaseAuth _auth;
   final SharedPreferences _pref;
-
-  AuthService(this._auth, this._pref);
 
   Future<UserCredential> signIn(AuthModel model) async {
     return await _auth.signInWithEmailAndPassword(

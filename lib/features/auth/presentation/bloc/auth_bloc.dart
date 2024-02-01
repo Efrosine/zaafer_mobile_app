@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zaafer_mobile_app/config/extentions/string_validator.dart';
 import 'package:zaafer_mobile_app/features/auth/domain/entities/auth_entity.dart';
+import 'package:zaafer_mobile_app/features/auth/presentation/bloc/form_item.dart';
 
 import '../../domain/usecases/auth_usecase.dart';
 
@@ -39,28 +39,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _authSignIn(AuthSignInEvent event, Emitter<AuthState> emit) async {
+    var email = state.email!.value;
+    var password = state.password!.value;
+
     emit(AuthLoadingState());
 
-    await _singInUseCase(event.authEntity).then((value) {
-      value.fold(
-        (l) => emit(AuthErrorState(l.code)),
-        (r) => emit(AuthSuccessState()),
-      );
-    });
+    final result = await _singInUseCase(AuthEntity(email: email, password: password));
+
+    result.fold(
+      (l) => emit(AuthErrorState(l.code)),
+      (r) => emit(AuthSuccessState()),
+    );
   }
 
   FutureOr<void> _authSignUp(AuthSignUpEvent event, Emitter<AuthState> emit) async {
+    final email = state.email!.value;
+    final password = state.password!.value;
+
     emit(AuthLoadingState());
-    await _singUpUseCase(event.authEntity).then((value) {
-      value.fold(
-        (l) => emit(AuthErrorState(l.code)),
-        (r) => emit(AuthSuccessState()),
-      );
-    });
+
+    final result = await _singUpUseCase(AuthEntity(email: email, password: password));
+
+    result.fold(
+      (l) => emit(AuthErrorState(l.code)),
+      (r) => emit(AuthSuccessState()),
+    );
   }
 
   FutureOr<void> _authSignOut(AuthSignOutEvent event, Emitter<AuthState> emit) {
     emit(AuthLoadingState());
+
     _logOutUseCase().then((value) {
       emit(AuthSuccessState());
     });
@@ -71,38 +79,45 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (_isSignedInUseCase()) {
       emit(AuthSuccessState());
+    } else {
+      emit(AuthInitState());
     }
   }
 
   FutureOr<void> _authEmailChanged(AuthEmailChangedEvent event, Emitter<AuthState> emit) {
-    String email = event.email;
-
-    if (email.isValidEmail()) {
-      emit(AuthEmailChangedState(email: email));
-    } else {
-      emit(AuthEmailChangedState(email: email, message: 'Invalid email'));
-    }
+    emit(
+      state.copyWith(
+        email: FormItem(
+          value: event.email,
+          error: event.email.isValidEmail() ? null : 'Invalid email',
+        ),
+      ),
+    );
   }
 
   FutureOr<void> _authPasswordChanged(
       AuthPasswordChangedEvent event, Emitter<AuthState> emit) {
-    String password = event.password;
-
-    if (password.isValidPassword()) {
-      emit(AuthPasswordChangedState(password: password));
-    } else {
-      emit(AuthPasswordChangedState(password: password, message: 'Invalid password'));
-    }
+    emit(
+      state.copyWith(
+        password: FormItem(
+          value: event.password,
+          error: event.password.isValidPassword() ? null : 'Invalid password',
+        ),
+      ),
+    );
   }
 
   FutureOr<void> _authConfirmPasswordChanged(
       AuthConfirmPasswordChangedEvent event, Emitter<AuthState> emit) {
-    String confirmPassword = event.confirmPassword;
-    if (confirmPassword.isValidConfirmPassword(event.password)) {
-      emit(AuthConfirmPasswordChangedState(confirmPassword: confirmPassword));
-    } else {
-      emit(AuthConfirmPasswordChangedState(
-          confirmPassword: confirmPassword, message: 'Password not match'));
-    }
+    emit(
+      state.copyWith(
+        confirmPassword: FormItem(
+          value: event.confirmPassword,
+          error: event.confirmPassword.isValidConfirmPassword(state.password?.value ?? '')
+              ? null
+              : 'Password not match',
+        ),
+      ),
+    );
   }
 }

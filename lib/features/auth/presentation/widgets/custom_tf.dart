@@ -3,39 +3,32 @@ import 'package:flutter/material.dart';
 class CustomTF extends StatelessWidget {
   const CustomTF({
     super.key,
-    required this.controller,
     required this.label,
     required this.hintText,
     this.isPasword,
-    this.errorMessage,
     this.onChanged,
+    this.validator,
   });
 
-  final String label, hintText;
-
-  final bool? isPasword;
-  final String? errorMessage;
   final Function(String value)? onChanged;
-  final TextEditingController? controller;
+  final String? Function(String? value)? validator;
+  final String label, hintText;
+  final bool? isPasword;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       obscureText: isPasword ?? false,
       onChanged: onChanged,
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
       decoration: InputDecoration(
         label: Text(label),
         hintText: hintText,
-        errorText: errorMessage,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'This field is required';
-        }
-
-        return null;
-      },
+      validator: validator,
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:zaafer_mobile_app/config/extentions/textstyle_util.dart';
 import 'package:zaafer_mobile_app/features/auth/presentation/widgets/custom_tf.dart';
 
 import '../../../../core/common/custom_widgets/dialog_widget/warning_dialog.dart';
-import '../../domain/entities/auth_entity.dart';
+import '../../../../core/common/overlay/loading_overlay.dart';
 import '../bloc/auth_bloc.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -14,16 +14,26 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loadingOverlay = LoadingOverlay();
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         switch (state.runtimeType) {
+          case AuthInitState:
+            loadingOverlay.hide();
+            break;
+          case AuthLoadingState:
+            loadingOverlay.show(context);
+            break;
           case AuthSuccessState:
+            loadingOverlay.hide();
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               backgroundColor: CColor.positive,
               content: Text('Sign Up Success'),
             ));
+            Navigator.pushReplacementNamed(context, '/dataentry');
             break;
           case AuthErrorState:
+            loadingOverlay.hide();
             state as AuthErrorState;
             showDialog(
                 context: context,
@@ -49,10 +59,6 @@ class SignUpContent extends StatelessWidget {
     final globalKey = GlobalKey<FormState>();
     final blocRead = context.read<AuthBloc>();
 
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final confirmPasswordController = TextEditingController();
-
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -67,63 +73,41 @@ class SignUpContent extends StatelessWidget {
               const Gap(8),
               const Text(CString.signupSubtitle),
               const Gap(32),
-              Form(
-                key: globalKey,
-                child: Column(
-                  children: [
-                    BlocBuilder<AuthBloc, AuthState>(
-                      buildWhen: (previous, current) => current is AuthEmailChangedState,
-                      builder: (context, state) {
-                        return CustomTF(
-                          controller: emailController,
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  return Form(
+                    key: globalKey,
+                    child: Column(
+                      children: [
+                        CustomTF(
                           label: 'Email',
                           hintText: 'yanto123@gmail.com',
                           onChanged: (value) =>
                               blocRead.add(AuthEmailChangedEvent(email: value)),
-                          errorMessage:
-                              state is AuthEmailChangedState ? state.message : null,
-                        );
-                      },
-                    ),
-                    const Gap(24),
-                    BlocBuilder<AuthBloc, AuthState>(
-                      buildWhen: (previous, current) =>
-                          current is AuthPasswordChangedState,
-                      builder: (context, state) {
-                        return CustomTF(
-                          controller: passwordController,
+                          validator: (value) => state.email?.error,
+                        ),
+                        const Gap(24),
+                        CustomTF(
                           label: 'Password',
                           hintText: 'yanto@123',
                           isPasword: false,
                           onChanged: (value) =>
                               blocRead.add(AuthPasswordChangedEvent(password: value)),
-                          errorMessage:
-                              state is AuthPasswordChangedState ? state.message : null,
-                        );
-                      },
-                    ),
-                    const Gap(24),
-                    BlocBuilder<AuthBloc, AuthState>(
-                      buildWhen: (previous, current) =>
-                          current is AuthConfirmPasswordChangedState,
-                      builder: (context, state) {
-                        return CustomTF(
-                          controller: confirmPasswordController,
+                          validator: (value) => state.password?.error,
+                        ),
+                        const Gap(24),
+                        CustomTF(
                           label: 'Ulangi Password',
                           hintText: 'yanto@123',
                           isPasword: false,
                           onChanged: (value) => blocRead.add(
-                              AuthConfirmPasswordChangedEvent(
-                                  password: passwordController.text,
-                                  confirmPassword: value)),
-                          errorMessage: state is AuthConfirmPasswordChangedState
-                              ? state.message
-                              : null,
-                        );
-                      },
+                              AuthConfirmPasswordChangedEvent(confirmPassword: value)),
+                          validator: (value) => state.confirmPassword?.error,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
               const Gap(32),
               Row(
@@ -147,13 +131,8 @@ class SignUpContent extends StatelessWidget {
                   onPressed: () {
                     var state = globalKey.currentState!;
                     if (state.validate()) {
-                      var email = emailController.text;
-                      var password = passwordController.text;
-                      blocRead.add(AuthSignUpEvent(
-                          authEntity: AuthEntity(
-                        email: email,
-                        password: password,
-                      )));
+                      blocRead.add(AuthSignUpEvent());
+                      state.reset();
                     }
                   },
                   child: const Text(CString.signupTitle),

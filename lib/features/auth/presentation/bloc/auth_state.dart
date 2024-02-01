@@ -1,22 +1,35 @@
 part of 'auth_bloc.dart';
 
 class AuthState extends Equatable {
-  const AuthState({this.email, this.confirmPassword, this.password});
+  const AuthState({
+    this.email = const FormItem(error: 'Please enter your email'),
+    this.password = const FormItem(error: 'Please enter your password'),
+    this.confirmPassword = const FormItem(error: 'Please enter your confirm password'),
+  });
 
-  final String? confirmPassword;
-  final String? email;
-  final String? password;
+  final FormItem? confirmPassword;
+  final FormItem? email;
+  final FormItem? password;
 
   @override
-  List<Object> get props => [email ?? '', password ?? '', confirmPassword ?? ''];
+  List<Object> get props => [email!.value, password!.value, confirmPassword!.value];
+
+  AuthState copyWith({
+    FormItem? email,
+    FormItem? password,
+    FormItem? confirmPassword,
+  }) {
+    return AuthState(
+      email: email ?? this.email,
+      password: password ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
+    );
+  }
 }
 
 class AuthInitState extends AuthState {}
 
-class AuthChangeMethodState extends AuthState {
-  @override
-  List<Object> get props => [];
-}
+class AuthChangeMethodState extends AuthState {}
 
 class AuthSuccessState extends AuthState {}
 
@@ -30,39 +43,3 @@ class AuthErrorState extends AuthState {
 }
 
 class AuthLoadingState extends AuthState {}
-
-class AuthEmailChangedState extends AuthState {
-  const AuthEmailChangedState({
-    super.email,
-    this.message,
-  });
-
-  final String? message;
-
-  @override
-  List<Object> get props => [message ?? ''];
-}
-
-class AuthPasswordChangedState extends AuthState {
-  const AuthPasswordChangedState({
-    super.password,
-    this.message,
-  });
-
-  final String? message;
-
-  @override
-  List<Object> get props => [message ?? ''];
-}
-
-class AuthConfirmPasswordChangedState extends AuthState {
-  const AuthConfirmPasswordChangedState({
-    super.confirmPassword,
-    this.message,
-  });
-
-  final String? message;
-
-  @override
-  List<Object> get props => [message ?? ''];
-}

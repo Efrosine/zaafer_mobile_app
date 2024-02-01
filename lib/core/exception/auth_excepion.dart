@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:developer';
 
 class SignUpException extends FirebaseAuthException {
   SignUpException([code = 'An unkown exception']) : super(code: code);
@@ -15,6 +14,8 @@ class SignUpException extends FirebaseAuthException {
       case 'weak-password':
         return SignUpException(
             'Your password is too weak, please use a stronger password');
+      case 'network-request-failed':
+        return SignUpException('Please check your internet connection');
       default:
         return SignUpException();
     }
@@ -25,10 +26,6 @@ class SignInException extends FirebaseAuthException {
   SignInException([code = 'An unkown exception']) : super(code: code);
 
   factory SignInException.fromCode(String code) {
-    log(
-      'code: $code',
-      name: 'SignInException',
-    );
     switch (code) {
       case 'invalid-email':
         return SignInException('Your email address is not valid');
@@ -40,6 +37,8 @@ class SignInException extends FirebaseAuthException {
         return SignInException('Your Email or Password are wrong');
       case 'channel-error':
         return SignInException('Email and Password is required');
+      case 'network-request-failed':
+        return SignInException('Please check your internet connection');
       default:
         return SignInException();
     }
